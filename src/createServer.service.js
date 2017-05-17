@@ -11,8 +11,11 @@ const create = (paths, assert = false) =>
     if(path) path.headers = updateHeaders(path);
 
     loadBody(req, (body) => {
-      if (validate(req, body, path, assert))
+      if (validate(req, body, path, assert)) {
+        const {status = 200} = path;
+        res.writeHead(status);
         res.end(path.response);
+      }
       else {
         res.writeHead(404);
         res.end('These are not the paths you are looking for.');
