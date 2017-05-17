@@ -1,7 +1,7 @@
 import http from 'http';
 import validate from './validatePath.service';
 import loadBody from './body.service';
-import { updateBody, updateHeaders, getContentType, getResponse } from './path.service';
+import { updateBody, updateHeaders, getResponse, getResponseHeaders } from './path.service';
 
 const current = (url, paths) => paths.find((p) => p.path === url.split('?')[ 0 ]);
 
@@ -14,9 +14,9 @@ const create = (paths, assert = false) =>
     loadBody(req, (body) => {
       if (validate(req, body, path, assert)) {
         const { status = 200 } = path;
-        const contentType = getContentType(path);
+        const headers = getResponseHeaders(path);
 
-        res.setHeader('content-type', contentType);
+        Object.keys(headers).forEach((key) => res.setHeader(key, headers[ key ]));
         res.writeHead(status);
         res.end(getResponse(path));
       }
