@@ -1,11 +1,11 @@
 import { expect } from 'chai';
 import { start, stop } from "../../src/server";
-import { get, post } from "../helpers/api";
+import { post, put } from "../helpers/api";
 import { NOT_FOUND, OK } from "http-status-codes";
 import shrug from '../helpers/shrug';
 import { TOSS_STATUS_CODE } from "../helpers/execptions";
 
-const method = 'GET';
+const method = 'PUT';
 
 describe(method, () => {
   let expected, path, server;
@@ -13,35 +13,23 @@ describe(method, () => {
   beforeEach(() => {
     expected = shrug.word();
     path = `/${expected}/${method}`;
+    server = start({ paths: [ { path, method, response: expected } ] });
   });
 
   afterEach(() => {
     stop(server);
   });
 
-  it('specifying a get will produce a 200', () => {
-    server = start({ paths: [ { path, method, response: expected } ] });
-
-    return get(path).then(({ body, statusCode }) => {
-      expect(statusCode).to.equal(OK);
-      expect(body).to.equal(expected);
-    });
-  });
-
-  it('case insensitive get will produce a 200', () => {
-    server = start({ paths: [ { path, method: 'GeT', response: expected } ] });
-
-    return get(path).then(({ body, statusCode }) => {
+  it('default is a 200', () => {
+    return put(path).then(({ body, statusCode }) => {
       expect(statusCode).to.equal(OK);
       expect(body).to.equal(expected);
     });
   });
 
   it(`only response to ${method}`, () => {
-    server = start({ paths: [ { path, method: 'GET', response: expected } ] });
-
     return post(path)
-      .then(() => TOSS_STATUS_CODE('NOT 404'))
+      .then(() => TOSS_STATUS_CODE('NOT A 404'))
       .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
   });
 });
