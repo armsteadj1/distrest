@@ -4,12 +4,12 @@ import loadBody from './body.service';
 
 const current = (url, paths) => paths.find((p) => p.path === url.split('?')[ 0 ]);
 
-const create = (paths) =>
+const create = (paths, assert = false) =>
   http.createServer((req, res) => {
     const path = current(req.url, paths);
 
     loadBody(req, (body) => {
-      if (validate(req, body, path))
+      if (validate(req, body, path, assert))
         res.end(path.response);
       else {
         res.writeHead(404);
