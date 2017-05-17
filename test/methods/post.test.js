@@ -55,6 +55,25 @@ describe(method, () => {
         .then(() => TOSS_STATUS_CODE('NOT A 404'))
         .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
     });
+
+    describe('json', () => {
+      it('200 if match on body', () => {
+        const body = { body: 'body is checked' };
+        server = start({ paths: [ { path, method, response: expected, body } ] });
+
+        return post(path, { body, json: true })
+          .then(({ statusCode }) => expect(statusCode).to.equal(OK));
+      });
+
+      it('404 if no match on body', () => {
+        const body = { body: 'body is checked' };
+        server = start({ paths: [ { path, method, response: expected, body } ] });
+
+        return post(path, { json: true })
+          .then(() => TOSS_STATUS_CODE('NOT A 404'))
+          .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
+      });
+    })
   });
 
   describe('headers', () => {
