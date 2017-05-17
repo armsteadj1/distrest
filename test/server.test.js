@@ -1,23 +1,42 @@
 import { expect } from 'chai';
-import { start, stop } from "../src/server";
+import distrest, { start, stop } from "../src/server";
 import { get } from "./helpers/api";
 import { OK } from "http-status-codes";
 
 describe('server', () => {
   describe('port', () => {
+    let server;
+
+    afterEach(() => stop(server));
+
     it('will start server on correct port', () => {
-      const server = start({ port: 7331 });
+      server = start({ port: 7331 });
 
       return get('/ping', { host: 'http://localhost:7331' }).then(({ statusCode }) => {
         expect(statusCode).to.equal(OK);
-        stop(server);
+      });
+    });
+  });
+
+  describe('export all', () => {
+    let server;
+
+    afterEach(() => distrest.stop(server));
+
+    it('will start server on correct port', () => {
+      server = distrest.start({ port: 7331 });
+
+      return get('/ping', { host: 'http://localhost:7331' }).then(({ statusCode }) => {
+        expect(statusCode).to.equal(OK);
       });
     });
   });
 
   describe('defaults', () => {
+    let server;
+
     it('will start the server with defaults', () => {
-      const server = start();
+      server = start();
 
       return get('/ping').then(({ statusCode }) => {
         expect(statusCode).to.equal(OK);

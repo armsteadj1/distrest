@@ -14,3 +14,5 @@ export const start = ({assert = false, port = 1337, paths = []} = {}) => {
 export const stop = (server) => {
   server.close();
 };
+
+export default {stop, start};
