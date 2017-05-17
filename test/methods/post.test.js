@@ -44,7 +44,7 @@ describe(method, () => {
       server = start({ paths: [ { path, method, response: expected, body } ] });
 
       return post(path, { body })
-        .then(({statusCode}) => expect(statusCode).to.equal(OK));
+        .then(({ statusCode }) => expect(statusCode).to.equal(OK));
     });
 
     it('404 if no match on body', () => {
@@ -52,6 +52,35 @@ describe(method, () => {
       server = start({ paths: [ { path, method, response: expected, body } ] });
 
       return post(path)
+        .then(() => TOSS_STATUS_CODE('NOT A 404'))
+        .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
+    });
+  });
+
+  describe('headers', () => {
+    it('will 200 all headers match', () => {
+      let headers = { authorization: shrug.string(), [shrug.word()]: shrug.word() };
+      server = start({ paths: [ { path, method, response: expected, headers: headers } ] });
+
+      return post(path, { headers })
+        .then(({ statusCode }) => expect(statusCode).to.equal(OK));
+    });
+
+    it('will 404 if a header doesnt match', () => {
+      let headers = { authorization: shrug.string() };
+      server = start({ paths: [ { path, method, response: expected, headers: headers } ] });
+
+      return post(path)
+        .then(() => TOSS_STATUS_CODE('NOT A 404'))
+        .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
+    });
+
+    it('will 404 if any of the headers dont match', () => {
+      let headers = { authorization: shrug.string(), 'accept': shrug.word() };
+      let pathHeaders = { ...headers, ...{ [shrug.word()]: shrug.word() } };
+      server = start({ paths: [ { path, method, response: expected, headers: pathHeaders } ] });
+
+      return post(path, { headers })
         .then(() => TOSS_STATUS_CODE('NOT A 404'))
         .catch(({ response }) => expect(response.statusCode).to.equal(NOT_FOUND));
     });
