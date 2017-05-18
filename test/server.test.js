@@ -49,4 +49,30 @@ describe('server', () => {
       });
     });
   });
+
+  describe('assert was called', () => {
+    let server;
+
+    afterEach(() => stop(server));
+
+    it('will increase call count', () => {
+      server = start();
+
+      return get('/ping').then(() => {
+        expect(server.paths[0].calls.length).to.equal(1);
+
+        return get('/ping').then(() => {
+          expect(server.paths[0].calls.length).to.equal(2);
+        });
+      });
+    });
+
+    it('will add the request for each call', () => {
+      server = start();
+
+      return get('/ping').then(() => {
+        expect(server.paths[0].calls[0].constructor.name).to.equal("IncomingMessage");
+      });
+    });
+  });
 });

@@ -1,7 +1,7 @@
 import http from 'http';
 import validate from './validatePath.service';
 import loadBody from './body.service';
-import { updateBody, updateHeaders, getResponse, getResponseHeaders } from './path.service';
+import { updateBody, updateHeaders, getResponse, getResponseHeaders, increaseCallCount } from './path.service';
 
 const current = (url, paths) => paths.find((p) => p.path === url.split('?')[ 0 ]);
 
@@ -13,6 +13,7 @@ const create = (paths, assert = false) =>
 
     loadBody(req, (body) => {
       if (validate(req, body, path, assert)) {
+        path.calls.push(req);
         const { status = 200 } = path;
         const headers = getResponseHeaders(path);
 
