@@ -1,4 +1,4 @@
-# distRest
+# distrest
 
 Stop stressing about mocking out those pesky external APIs and let `distRest` do all the worrying. This library was created to keep all the management of your external stubs right where they should be, in your tests. It will spin up and spin down a server on the fly within your tests and do it FAST. No need to worry about external dependency management and waiting for those stub servers to start up, these start up with your tests and stop with your tests.
 
@@ -18,7 +18,7 @@ npm install distrest
 ## Usage
 
 ```
-	import { start, stop } from 'distRest';
+    import { start, stop } from 'distRest';
     import request from 'request'; //npm i request
 
 	let server = start();
@@ -35,7 +35,7 @@ npm install distrest
 
 
 ```
-	import distrest from 'distRest';
+    import distrest from 'distRest';
     import request from 'request'; //npm i request
 
 	let server = distrest.start();
