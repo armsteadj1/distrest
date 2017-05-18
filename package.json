@@ -1,5 +1,5 @@
 {
-  "name": "distREST",
+  "name": "distrest",
   "description": "External API stubing module for on the fly stubbing for automated testing",
   "version": "0.1.0",
   "main": "lib/server.js",
