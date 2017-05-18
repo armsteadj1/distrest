@@ -24,4 +24,4 @@ const contentType = (path) => {
     return path.responseOptions.headers[ 'content-type' ]
   } catch (e) {
   }
-}
+};
