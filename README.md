@@ -96,9 +96,3 @@ Be a part of this project! You can run the test using the following.
 This project is licensed under the [MIT License](http://en.wikipedia.org/wiki/MIT_License)
 
 Proudly written in Des Moines, Iowa.
-
-
-## To Do
-- examples
-- command line start with json opts file
-- chai plugin (chai-is-distrest)
